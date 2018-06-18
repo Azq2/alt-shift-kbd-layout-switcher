@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=gnome-alt-shift-kbd-layout-switcher
+Comment=Non-blocking Alt-Shift input source switcher for Gnome. 
+Exec=gnome-alt-shift-kbd-layout-switcher
+Terminal=false
+Type=Application
+NoDisplay=false
