@@ -15,3 +15,4 @@ add_executable(ctrl-shift-layout-switcher ${SOURCES} ${HEADERS})
 target_link_libraries(ctrl-shift-layout-switcher ${X11_LIBRARIES} -lXi -pthread)
 
 install(TARGETS ctrl-shift-layout-switcher RUNTIME DESTINATION bin)
+install(FILES gnome-alt-shift-kbd-layout-switcher.desktop DESTINATION /etc/xdg/autostart)
