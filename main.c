@@ -18,6 +18,7 @@
 #define CMD_GET_SOURCES			"gsettings get org.gnome.desktop.input-sources sources"
 #define CMD_GET_CURRENT_SOURCE	"gsettings get org.gnome.desktop.input-sources current"
 #define CMD_SET_CURRENT_SOURCE	"gsettings set org.gnome.desktop.input-sources current %d"
+#define CMD_ACTIVATE_CURRENT_SOURCE	"gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval \"imports.ui.status.keyboard.getInputSourceManager().inputSources[%d].activate()\""
 
 #define MAX_INPUT_CLASSES 512
 
@@ -78,6 +79,9 @@ int get_current_input_source() {
 void set_current_input_source(int source) {
 	char buffer[256];
 	sprintf(buffer, CMD_SET_CURRENT_SOURCE, source);
+	system(buffer);
+	
+	sprintf(buffer, CMD_ACTIVATE_CURRENT_SOURCE, source);
 	system(buffer);
 }
 
