@@ -1,0 +1,15 @@
+Source: gnome-alt-shift-kbd-layout-switcher
+Section: kernel
+Priority: optional
+Maintainer: Kirill Zhumarin <kirill.zhumarin@gmail.com>
+Rules-Requires-Root: no
+Build-Depends:
+ debhelper-compat (= 12),
+ cmake,
+ quilt,
+Standards-Version: 4.5.0
+
+Package: gnome-alt-shift-kbd-layout-switcher
+Architecture: any
+Depends:
+Description: Non-blocking Alt-Shift input source switcher for Gnome. 
