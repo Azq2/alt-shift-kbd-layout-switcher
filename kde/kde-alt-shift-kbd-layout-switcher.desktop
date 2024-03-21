@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=kde-alt-shift-kbd-layout-switcher
+Comment=Non-blocking Alt-Shift input source switcher for KDE. 
+Exec=kde-alt-shift-kbd-layout-switcher
+Terminal=false
+Type=Application
+NoDisplay=false
