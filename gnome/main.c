@@ -4,7 +4,6 @@
 #include <errno.h>
 #include <string.h>
 #include <unistd.h>
-#include <pthread.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -21,9 +20,6 @@
 #define CMD_ACTIVATE_CURRENT_SOURCE	"gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval \"imports.ui.status.keyboard.getInputSourceManager().inputSources[%d].activate()\""
 
 #define MAX_INPUT_CLASSES 512
-
-static int threads_cnt = 0;
-pthread_t threads_pool[64];
 
 typedef struct {
 	XEventClass classes[MAX_INPUT_CLASSES];
@@ -142,13 +138,6 @@ void attach_input_devices(Display *display, KeyboardEvents *events) {
 		XFreeDeviceList(devices);
 }
 
-void *switch_input_source_thread(void *x) {
-	int dir = *((int *) x);
-	switch_input_source(dir);
-	--threads_cnt;
-	return NULL;
-}
-
 int main() {
 	Display *display;
 	XEvent event;
@@ -199,10 +188,7 @@ int main() {
 				}
 				
 				if (dir) {
-					if (threads_cnt < (sizeof(threads_pool) / sizeof(threads_pool[0]))) {
-						pthread_create(&threads_pool[threads_cnt], NULL, switch_input_source_thread, &dir);
-						++threads_cnt;
-					}
+					switch_input_source(dir);
 				}
 			} else if (event.type == events.release_event_id) {
 				XDeviceKeyEvent *key = (XDeviceKeyEvent *) &event;
