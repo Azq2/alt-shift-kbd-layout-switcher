@@ -1,5 +1,5 @@
 # WTF?
-Non-blocking Alt-Shift input source switcher for Gnome. 
+Non-blocking Alt-Shift input source switcher for Gnome/KDE.
 
 # SUMMARY
 
@@ -37,14 +37,13 @@ But I remembered that I was a programmer and using Linux... i wrote own daemon f
 # INSTALL
 1. Build and install:
 ```
-sudo apt install checkinstall g++ gcc cmake libxi-dev libx11-dev
+sudo apt install g++ gcc cmake libxi-dev libx11-dev fakeroot
 git clone https://github.com/Azq2/gnome-alt-shift-kbd-layout-switcher
-cd gnome-alt-shift-kbd-layout-switcher
-mkdir build
-cd build
-cmake ../
-make
-sudo checkinstall
+cd gnome
+# cd kde
+fakeroot debian/rules binary
+dpkg -i ../gnome-alt-shift-kbd-layout-switcher_1.0_amd64.deb
+# dpkg -i ../kde-alt-shift-kbd-layout-switcher_1.0_amd64.deb
 ```
 2. Delete any shortcuts for layout switching.
 3. Relogin current gnome session. 
