@@ -14,11 +14,6 @@
 #define KEY_SHIFT		XK_Shift_L
 #define KEY_ALT			XK_Alt_L
 
-#define CMD_GET_SOURCES			"gsettings get org.gnome.desktop.input-sources sources"
-#define CMD_GET_CURRENT_SOURCE	"gsettings get org.gnome.desktop.input-sources current"
-#define CMD_SET_CURRENT_SOURCE	"gsettings set org.gnome.desktop.input-sources current %d"
-#define CMD_ACTIVATE_CURRENT_SOURCE	"gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval \"imports.ui.status.keyboard.getInputSourceManager().inputSources[%d].activate()\""
-
 #define MAX_INPUT_CLASSES 512
 
 typedef struct {
@@ -28,71 +23,12 @@ typedef struct {
 	int release_event_id;
 } KeyboardEvents;
 
-int get_input_sources_count() {
-	char buffer[256] = {0};
-	FILE *file = popen(CMD_GET_SOURCES, "r");
-	if (file) {
-		fgets(buffer, sizeof(buffer) - 1, file);
-		fclose(file);
-	}
-	
-	int sources = 0;
-	int array_level = 0;
-	int list_level = 0;
-	
-	int i = 0;
-	while (buffer[i]) {
-		if (buffer[i] == '[') {
-			++array_level;
-		} else if (buffer[i] == ']') {
-			--array_level;
-		} else if (buffer[i] == '(') {
-			++list_level;
-		} else if (buffer[i] == ')') {
-			--list_level;
-			if (list_level == 0 && array_level == 1)
-				++sources;
-		}
-		++i;
-	}
-	
-	return sources;
-}
-
-int get_current_input_source() {
-	char buffer[256] = {0};
-	FILE *file = popen(CMD_GET_CURRENT_SOURCE, "r");
-	if (file) {
-		fgets(buffer, sizeof(buffer) - 1, file);
-		fclose(file);
-	}
-	
-	int num = 0;
-	sscanf(buffer, "uint32 %d", &num);
-	return num;
-}
-
-void set_current_input_source(int source) {
-	char buffer[256];
-	sprintf(buffer, CMD_SET_CURRENT_SOURCE, source);
-	system(buffer);
-	
-	sprintf(buffer, CMD_ACTIVATE_CURRENT_SOURCE, source);
-	system(buffer);
-}
-
 void switch_input_source(int dir) {
-	int current = get_current_input_source();
-	int total = get_input_sources_count();
-	
-	current += dir;
-	
-	if (current < 0)
-		current = total - 1;
-	if (current >= total)
-		current = 0;
-	
-	set_current_input_source(current);
+	if (dir < 0) {
+		system("qdbus org.kde.keyboard /Layouts org.kde.KeyboardLayouts.switchToPreviousLayout");
+	} else {
+		system("qdbus org.kde.keyboard /Layouts org.kde.KeyboardLayouts.switchToNextLayout");
+	}
 }
 
 void attach_input_devices(Display *display, KeyboardEvents *events) {
