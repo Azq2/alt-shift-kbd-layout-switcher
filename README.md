@@ -1,50 +1,42 @@
-# WTF?
-Non-blocking Alt-Shift input source switcher for Gnome/KDE.
-
 # SUMMARY
 
-Workaround for bug: https://www.linux.org.ru/forum/general/14022907
+Workaround for KDE/GNOME with broken `Alt+Shift` for layout switching.
 
-In Ubuntu (since >= 17.10) come in strange bug with Alt+Shift hotkey for change keyboard layout:
+Use this daemon if you see one of these problems:
+1. `Alt+Shift` is an impossible combination for switching llayout.
+2. `Shift` is ignored in some cases.
+    - Press `Alt`
+    - Press `Shift`
+    - Release ONLY `Alt`
+    - Try to type text. Typed text is lowercase, `Shift` is ignored.
+3. Text is not typed in some cases.
+    - Press `Alt`
+    - Press `Shift`
+    - Release ONLY `Alt`
+    - Try to type text. Nothing happens, input blocked and window lost focus.
 
-1. Press ALt
-
-2. Press Shift
-
-3. Release ONLY Alt (expected - continue text typing using uppercase)
-
-4. Try to type text - but nothing happens, input blocked and window unfocused. WTF?
-
-Yes, i tryed using setxkbmap:
-```
-setxkbmap -model pc104 -layout ru,us -option grp:lalt_toggle -verbose
-```
-
-And it not working:
-
-1. Press Alt
-
-2. Press Shift
-
-3. Release ONLY Alt (expected - continue text typing using uppercase)
-
-4. Try to type text. Typed text in lowercase, ignoring Shift. 
-
-:( 
-
-But I remembered that I was a programmer and using Linux... i wrote own daemon for switching keyboard layout using my favorite ALt+Shift combo!
-
-# INSTALL
+# KDE
 1. Build and install:
-```
-sudo apt install g++ gcc cmake libxi-dev libx11-dev fakeroot
-git clone https://github.com/Azq2/gnome-alt-shift-kbd-layout-switcher
-cd gnome
-# cd kde
-fakeroot debian/rules binary
-dpkg -i ../gnome-alt-shift-kbd-layout-switcher_1.0_amd64.deb
-# dpkg -i ../kde-alt-shift-kbd-layout-switcher_1.0_amd64.deb
-```
+    ```sh
+    sudo apt install g++ gcc cmake libxi-dev libx11-dev fakeroot
+    git clone https://github.com/Azq2/alt-shift-kbd-layout-switcher
+    cd alt-shift-kbd-layout-switcher/kde/
+    fakeroot debian/rules binary
+    dpkg -i ../kde-alt-shift-kbd-layout-switcher_1.0_amd64.deb
+    ```
 2. Delete any shortcuts for layout switching.
-3. Relogin current gnome session. 
-4. Try Alt+Shift and relax. 
+3. Relogin current KDE session. 
+4. Try `Alt+Shift`, now it works.
+
+# GNOME
+1. Build and install:
+    ```sh
+    sudo apt install g++ gcc cmake libxi-dev libx11-dev fakeroot
+    git clone https://github.com/Azq2/alt-shift-kbd-layout-switcher
+    cd alt-shift-kbd-layout-switcher/gnome/
+    fakeroot debian/rules binary
+    dpkg -i ../gnome-alt-shift-kbd-layout-switcher_1.0_amd64.deb
+    ```
+2. Delete any shortcuts for layout switching.
+3. Relogin GNOME session. 
+4. Try `Alt+Shift`, now it works.
