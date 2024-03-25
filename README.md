@@ -40,3 +40,6 @@ Use this daemon if you see one of these problems:
 2. Delete any shortcuts for layout switching.
 3. Relogin GNOME session. 
 4. Try `Alt+Shift`, now it works.
+
+# Links
+KDE bug: https://bugs.kde.org/show_bug.cgi?id=484439
